@@ -1,4 +1,4 @@
-// ################################## ACTIVIDAD ##################################
+// ############################################## ACTIVIDAD ##############################################
 
 class Rutina {
     method intensidad()
@@ -10,7 +10,7 @@ class Rutina {
     }
 }
 
-// ################################# ACTIVIDADES #################################
+// ############################################# ACTIVIDADES #############################################
 
 class Running inherits Rutina {
     const property intensidad
@@ -35,10 +35,66 @@ class Remo inherits Rutina {
 }
 
 class RemoCompetitivo inherits Remo {
-    // Aunque una solución es plantear desde Remo(intensidad = 1.7), aunque depende de que haya un atributo ahí.
+    // Una solución posible es plantear desde la declaración de la clase: "inherits Remo(intensidad = 1.7)"
+    // pero depende de que exista un atributo en Remo.
     override method intensidad() = 1.7
 
     override method descanso(tiempo) {
         return 2.max(super(tiempo) - 3)
+    }
+}
+
+// ############################################### PERSONA ###############################################
+
+class Persona {
+    var property peso 
+    const property tiempoDeEjercitacion
+
+    method kilosPorCaloria()
+
+    method practicar(rutina) {
+        peso -= self.calcularGasto(rutina)
+    }
+
+    method calcularGasto(rutina) {
+        return rutina.cuantasCaloriasQuemaEn(self.tiempoDeEjercitacion()) / self.kilosPorCaloria()
+    }
+}
+
+class PersonaSedentaria inherits Persona(tiempoDeEjercitacion = 5) {
+    override method kilosPorCaloria() = 7000 
+ 
+    override method practicar(rutina) {
+        self.validarSiPuedeAplicarRutina()
+        super(rutina)
+    }
+
+    method validarSiPuedeAplicarRutina() {
+        if(peso <= 50) {
+            self.error("No puede aplicar la rutina")
+        }
+    }
+}
+
+class PersonaAtleta inherits Persona(tiempoDeEjercitacion = 90) {
+    override method kilosPorCaloria() = 8000 
+
+    override method practicar(rutina) {
+        self.validarSiPuedeAplicarRutina(rutina)
+        super(rutina)
+    }
+
+    method validarSiPuedeAplicarRutina(rutina) {
+        if(self.caloriasQueConsumiria(rutina) <= 10000) {
+            self.error("No puede aplicar la rutina")
+        }
+    }
+
+    method caloriasQueConsumiria(rutina) {
+        return rutina.cuantasCaloriasQuemaEn(self.tiempoDeEjercitacion())
+    }
+
+    override method calcularGasto(rutina) {
+        return super(rutina) - 1
     }
 }
