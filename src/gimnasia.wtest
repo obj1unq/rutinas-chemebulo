@@ -31,7 +31,7 @@ describe "PUNTO 1: Rutinas." {
 describe "PUNTO 2: Personas." {
 
 	const calamardo = new PersonaSedentaria(peso = 60) // Una persona Sedentaria con peso 60 y tiempo de ejercicio 5.
-	const bob = new PersonaAtleta(peso = 40) // Una persona atleta con peso 40 
+	const bob = new PersonaAtleta(peso = 40) // Una persona atleta con peso 40.
 
 	const correrEnLaPlaya = new Running(intensidad = 1.2) // Una actividad de running con intensisdad 1.2
 	const maratonBA = new Maraton(intensidad = 1.5) // Una maraton con intensidad 1.5
@@ -87,21 +87,37 @@ describe "PUNTO 2: Personas." {
 
 describe "PUNTO 3: Consultas." {
 
-	// const nautico = // Un predio con remarEnElDelta y remarEnCaminoRemeros.
-	// const clubBarrial = // Un club con recreo y náutico.
+	// ############################################### CLUBES Y PREDIOS ###############################################
+
+
+	const clubBarrial = new Club(predios = #{nautico, recreo}) // Un club con náutico y recreo.
+	const nautico = new Predio(rutinas = #{remarEnElDelta, remarEnCaminoRemeros}) // Un predio con remarEnElDelta y remarEnCaminoRemeros.
+	const recreo = new Predio(rutinas = #{correrEnLaPlaya, maratonBA}) // Un predio con correrEnLaPlaya y maratonBA.
+
+	// ################################################### PERSONAS ###################################################
+
+	const calamardo = new PersonaSedentaria(peso = 60) // Una persona Sedentaria con peso 60 y tiempo de ejercicio 5.
+	const bob = new PersonaAtleta(peso = 40) // Una persona atleta con peso 40.
+
+	// #################################################### RUTINAS ###################################################
+
+	const correrEnLaPlaya = new Running(intensidad = 1.2) // Una actividad de running con intensisdad 1.2
+	const maratonBA = new Maraton(intensidad = 1.5) // Una maraton con intensidad 1.5
+	const remarEnElDelta = new Remo() // Una actividad de remo
+	const remarEnCaminoRemeros = new RemoCompetitivo() // Una actividad de remo comptetitivo
 
 	test "3.1: El mejor predio." {
-		// El mejor predio del clubBarrial para Bob debería ser recreo.
-		// El mejor predio del clubBarrial para Calamardo debería ser recreo.
+		assert.that(clubBarrial.mejorPredioPara(bob) == recreo) // El mejor predio del clubBarrial para Bob debería ser recreo.
+		assert.that(clubBarrial.mejorPredioPara(calamardo) == recreo) // El mejor predio del clubBarrial para Calamardo debería ser recreo.
 	}
 	
 	test "3.2: Predios tranquis." {
-		// No debería haber predios tranquis en el clubBarrial para Bob.
-		// Los predios tranquis del clubBarrial para Calamardo solo incluyen a recreo.
+		assert.that(clubBarrial.prediosTranquisPara(bob).isEmpty()) // No debería haber predios tranquis en el clubBarrial para Bob.
+		assert.that(clubBarrial.prediosTranquisPara(calamardo) == #{recreo}) // Los predios tranquis del clubBarrial para Calamardo solo incluyen a recreo.
 	}
 	
 	test "3.3: Rutinas más exigentes." {
-		// Las rutinas más exigentes del clubBarrial para Bob son maratonBA y remarEnCaminoRemeros.
-		// Las rutinas más exigentes del clubBarrial para Calamardo son maratonBA y remarEnElDelta.
+		assert.that(clubBarrial.rutinasMasExigentesPara(bob) == #{maratonBA, remarEnCaminoRemeros}) // Las rutinas más exigentes del clubBarrial para Bob son maratonBA y remarEnCaminoRemeros.
+		assert.that(clubBarrial.rutinasMasExigentesPara(calamardo) == #{maratonBA, remarEnElDelta}) // Las rutinas más exigentes del clubBarrial para Calamardo son maratonBA y remarEnElDelta.
 	}
 }

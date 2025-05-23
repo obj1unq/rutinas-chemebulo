@@ -1,4 +1,4 @@
-// ############################################## ACTIVIDAD ##############################################
+// ############################################### RUTINA ##############################################
 
 class Rutina {
     method intensidad()
@@ -10,7 +10,7 @@ class Rutina {
     }
 }
 
-// ############################################# ACTIVIDADES #############################################
+// ############################################## RUTINAS ##############################################
 
 class Running inherits Rutina {
     const property intensidad
@@ -44,7 +44,7 @@ class RemoCompetitivo inherits Remo {
     }
 }
 
-// ############################################### PERSONA ###############################################
+// ############################################## PERSONA ##############################################
 
 class Persona {
     var property peso 
@@ -96,5 +96,44 @@ class PersonaAtleta inherits Persona(tiempoDeEjercitacion = 90) {
 
     override method calcularGasto(rutina) {
         return super(rutina) - 1
+    }
+}
+
+// ################################################ CLUB ###############################################
+
+class Club {
+    const property predios
+
+    method mejorPredioPara(persona) {
+        return predios.max({predio => predio.caloriasQueQuemaCon(persona)})
+    }
+
+    method prediosTranquisPara(persona) {
+        return predios.filter({predio => predio.tieneRutinaTranquiPara(persona)})
+    }
+
+    method rutinasMasExigentesPara(persona) {
+        return predios.map({predio => predio.rutinaMasExigentePara(persona)}).asSet()
+    }
+}
+
+// ############################################### PREDIO ##############################################
+
+class Predio {
+    const property rutinas
+    const maximoDeCaloriasDeRutinaTranqui = 500
+
+    method caloriasQueQuemaCon(persona) {
+        return rutinas.sum({rutina => rutina.cuantasCaloriasQuemaEn(persona.tiempoDeEjercitacion())})
+    }
+
+    method tieneRutinaTranquiPara(persona) {
+        return rutinas.any({rutina => rutina.cuantasCaloriasQuemaEn(persona.tiempoDeEjercitacion())
+                                      < maximoDeCaloriasDeRutinaTranqui})
+    }
+
+
+    method rutinaMasExigentePara(persona) {
+        return rutinas.max({rutina => rutina.cuantasCaloriasQuemaEn(persona.tiempoDeEjercitacion())})
     }
 }
